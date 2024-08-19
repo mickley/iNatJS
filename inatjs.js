@@ -217,7 +217,7 @@ function checkAuthentication(apiToken, callback) {
             // Unset authorization, return false
             headers.Authorization = '';
             iNatAuthorized = false;
-            callback(false, xhr, status, error);
+            callback(false, {xhr, status, error});
          }
 
       });
