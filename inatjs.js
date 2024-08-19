@@ -204,11 +204,11 @@ function checkAuthentication(apiToken, callback) {
          fields: "login", 
 
          // User is authorized
-         success: function(data) {
+         success: function(user) {
 
-            // Set authorized user, return true
+            // Set authorized user, return true and the user info
             iNatAuthorized = user.results[0].login;
-            callback(true, data);
+            callback(true, user);
          }, 
 
          // User not authorized by iNaturalist
