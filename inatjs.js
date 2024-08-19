@@ -20,7 +20,7 @@ const base_url = "https://api.inaturalist.org"
 // See: https://api.inaturalist.org/v1/docs/
 
 // Rate-limiting options
-const opts = {
+const apiOptions = {
    APITimeout: 1000, // Set the API rate-limiting time to 1000 ms
    RequestsPerMinute: 60 // Set the number of requests in a minute before rate-limiting is enabled
 };
@@ -106,7 +106,7 @@ function makeINatRequest() {
       // Get the first API request in line
       const request = iNatAPIQueue.shift();
 
-      if (iNatAPIQueue.length > opts.RequestsPerMinute) iNatAPIRateLimiting = true;
+      if (iNatAPIQueue.length > apiOptions.RequestsPerMinute) iNatAPIRateLimiting = true;
 
       // Construct url from base URL, api version, endpoint, and any parameters
       let url = [base_url, request.apiVersion, request.endpoint].join("/");
@@ -126,37 +126,29 @@ function makeINatRequest() {
          url: url,
          success: function(data) {
 
-            // Check if we have a full request queue
-            if (iNatAPIRateLimiting) {
-
-               // Set a timeout to run the next API call in the queue, if any
-               setTimeout(makeINatRequest, opts.APITimeout);
-            } else {
-
-               // Run the next API call in the queue immediately
-               makeINatRequest()
-            }
-
             // Run the request success callback
             request.success(data);
          }, 
          error: function(xhr, status, error) {
 
+            // Run the request error callback
+            request.error(xhr, status, error);
+         },
+         complete: function(xhr, status) {
+
             // Check if we have a full request queue
             if (iNatAPIRateLimiting) {
 
                // Set a timeout to run the next API call in the queue, if any
-               setTimeout(makeINatRequest, opts.APITimeout);
+               setTimeout(makeINatRequest, apiOptions.APITimeout);
             } else {
 
                // Run the next API call in the queue immediately
                makeINatRequest()
             }
-
-            // Run the request error callback
-            request.error(xhr, status, error);
          }
       });
+
    } else {
 
       // API request queue is empty, deactivate queueing
