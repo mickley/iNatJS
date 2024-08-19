@@ -1,5 +1,5 @@
 // ########################################
-// iNatJS: An iNaturalist API toolkit for Javascript v1.0
+// iNatJS: An iNaturalist API toolkit for Javascript v1.1
 // By James Mickley
 // 
 // License: GNU GPLv3: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -30,7 +30,8 @@ const iNatAPIQueue = [];
 let iNatAPIQueued = false;
 let iNatAPIRateLimiting = false;
 
-// iNaturalist authorization. The headers will be updated later if authorized
+// iNaturalist authorization. 
+// If authorized, the headers will be updated, and iNatAuthorized set to the authorized user login
 let iNatAuthorized = false;
 const headers =  {     
    "Authorization": '',
@@ -205,9 +206,9 @@ function checkAuthentication(apiToken, callback) {
          // User is authorized
          success: function(data) {
 
-            // Set authorization, return true
-            iNatAuthorized = true;
-            callback(true);
+            // Set authorized user, return true
+            iNatAuthorized = user.results[0].login;
+            callback(true, data);
          }, 
 
          // User not authorized by iNaturalist
@@ -216,7 +217,7 @@ function checkAuthentication(apiToken, callback) {
             // Unset authorization, return false
             headers.Authorization = '';
             iNatAuthorized = false;
-            callback(false);
+            callback(false, xhr, status, error);
          }
 
       });
