@@ -123,6 +123,7 @@ function makeINatRequest() {
          headers: request.headers,
          data: request.data,
          dataType: "json",
+         contentType: 'application/json',
          url: url,
          success: function(data) {
 
