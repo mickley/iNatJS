@@ -1,5 +1,5 @@
 // ########################################
-// iNatJS: An iNaturalist API toolkit for Javascript v1.1
+// iNatJS: An iNaturalist API toolkit for Javascript v1.2
 // By James Mickley
 // 
 // License: GNU GPLv3: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -174,6 +174,28 @@ function queueINatRequest(request) {
 
    // Activate API request queueing
    iNatAPIQueued = true;
+}
+
+
+// Checks whether the iNat API queue is active. If so, waits [freq] in ms and re-checks
+// When the queue is empty, this returns false to the callback function
+function checkiNatQueue(freq, callback) {
+
+   // Check if there is an active queue
+   if (iNatAPIQueued) {
+
+      // Queue active, wait the freq time, then check again
+      setTimeout(checkiNatQueue, freq, freq, callback);
+
+      // There is an active queue, so return true
+      callback(true)
+
+   } else {
+
+      // Queue is empty, so return false
+      callback(false);
+
+   }
 }
 
 
