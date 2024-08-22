@@ -115,7 +115,7 @@ function makeINatRequest() {
       if(typeof request.params == 'object') url += "?" + $.param(request.params);
 
       // Add fields parameter for API v2, if specified
-      if(request.apiVersion == "v2" & request.fields != "") url += (typeof request.params == 'object' ? "&" : "?") + "fields=" + request.fields
+      if(request.apiVersion == "v2" & request.fields != "") url += (typeof request.params == 'object' ? "&" : "?") + "fields=" + request.fields;
 
       // Run the API request
       $.ajax({
@@ -278,5 +278,21 @@ function toRISON(arr) {
    return(str);
 }
 
+
+// Function to convert a string of url parameters into an object
+// Returns the object, or optionally a specified key
+function getUrlParams(url, key){
+
+   // Object to return
+   const params = {};
+
+   // Parse each url argument, decode it, and store in the object
+   url.replace(/[?&]?([^=&]+)=([^&]*)/g, function(s, key, value){
+      params[key] = decodeURIComponent(value);
+   });
+
+   // Return the specific key if specified, otherwise return the whole params object
+   return key ? params[key] : params;
+}
 
 
