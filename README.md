@@ -1,4 +1,4 @@
-# iNatJS
+# iNatJS [![DOI](https://zenodo.org/badge/844669230.svg)](https://doi.org/10.5281/zenodo.16380011)
 An iNaturalist API toolkit for Javascript
 
 iNatJS provides a flexible wrapper for interfacing with the iNaturalist API. 
