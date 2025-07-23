@@ -1,5 +1,5 @@
 // ########################################
-// iNatJS: An iNaturalist API toolkit for Javascript v2.0
+// iNatJS: An iNaturalist API toolkit for Javascript v2.1
 // By James Mickley
 // 
 // License: GNU GPLv3: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -129,7 +129,7 @@ class iNatJS {
 
 
    // Make the iNat API calls, but with rate-limiting enabled
-   makeINatRequest() {
+   #makeINatRequest() {
 
       // Check if there are API requests in the queue, if so, run the first one
       if (this.iNatAPIQueue.length > 0) {
@@ -174,11 +174,11 @@ class iNatJS {
                if (this.iNatAPIRateLimiting) {
 
                   // Set a timeout to run the next API call in the queue, if any
-                  setTimeout(this.makeINatRequest, this.APITimeout);
+                  setTimeout(this.#makeINatRequest, this.APITimeout);
                } else {
 
                   // Run the next API call in the queue immediately
-                  this.makeINatRequest()
+                  this.#makeINatRequest()
                }
             }
          });
@@ -205,7 +205,7 @@ class iNatJS {
 
       // If API request queueing isn't activated, then run the request immediately
       if (!this.iNatAPIQueued) {
-         this.makeINatRequest();
+         this.#makeINatRequest();
       }
 
       // Activate API request queueing
